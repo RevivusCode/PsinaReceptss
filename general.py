@@ -31,7 +31,7 @@ class KitchenApp(QMainWindow):
         self.resize(950, 600) 
         self.setStyleSheet(STYLE)
 
-        # Данные
+        #данные
         self.all_recipes = []
         self.favorites = []
         self.found_recipes = []
