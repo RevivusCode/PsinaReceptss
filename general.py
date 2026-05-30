@@ -7,7 +7,6 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 
-# Немного дополнил стиль, чтобы QLineEdit и выделенные элементы списка смотрелись гармонично
 STYLE = """
 QMainWindow { background-color: #121212; }
 QWidget { background-color: #121212; color: #FFFFFF; font-family: Arial; }
@@ -29,7 +28,7 @@ class KitchenApp(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("PsinaRecept")
-        self.resize(950, 600)  # Окно шире, чтобы удобно разместить две колонки
+        self.resize(950, 600) 
         self.setStyleSheet(STYLE)
 
         # Данные
@@ -38,7 +37,7 @@ class KitchenApp(QMainWindow):
         self.found_recipes = []
         self.current_dish = None
 
-        # Загрузка базы
+        #загрузка базы
         try:
             with open('recipes.json', 'r', encoding='utf-8') as f:
                 self.all_recipes = json.load(f)
@@ -47,13 +46,13 @@ class KitchenApp(QMainWindow):
         except json.JSONDecodeError:
             print("⚠️ Ошибка чтения JSON. Проверьте формат файла.")
 
-        # === ГЛАВНЫЙ КОНТЕЙНЕР ===
+        #глав конт.
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         main_layout = QHBoxLayout()
         central_widget.setLayout(main_layout)
 
-        # === ЛЕВАЯ КОЛОНКА (Просмотр рецепта) ===
+        #просмотр рецепта
         left_layout = QVBoxLayout()
         left_layout.addWidget(QLabel("🍽️ Название блюда:"))
         self.title_field = QLineEdit()
@@ -71,10 +70,10 @@ class KitchenApp(QMainWindow):
         self.btn_add_fav.clicked.connect(self.add_favorite)
         left_layout.addWidget(self.btn_add_fav)
 
-        # === ПРАВАЯ КОЛОНКА (Фильтры, Список, Кнопки) ===
+        #фильтр список кнопки
         right_layout = QVBoxLayout()
 
-        # Фильтры
+        #фильтры
         right_layout.addWidget(QLabel("🔍 Фильтры:"))
         filter_layout = QHBoxLayout()
         self.combo_cat = QComboBox()
@@ -91,13 +90,13 @@ class KitchenApp(QMainWindow):
         filter_layout.addWidget(btn_search)
         right_layout.addLayout(filter_layout)
 
-        # Список рецептов
+        #список рецептов
         right_layout.addWidget(QLabel("📖 Каталог рецептов:"))
         self.recipes_list = QListWidget()
         self.recipes_list.itemClicked.connect(self.show_selected_recipe)
         right_layout.addWidget(self.recipes_list)
 
-        # Кнопки управления
+        #кнопки управления
         btn_random = QPushButton("🎲 Случайное блюдо")
         btn_random.clicked.connect(self.show_random)
         btn_favorites = QPushButton("❤️ Мое избранное")
@@ -109,11 +108,11 @@ class KitchenApp(QMainWindow):
         right_layout.addWidget(btn_favorites)
         right_layout.addWidget(btn_exit)
 
-        # Сборка основного макета
+        #сборка основного макета
         main_layout.addLayout(left_layout)
         main_layout.addLayout(right_layout)
 
-        # Инициализация списка при запуске
+        #инициализация списка при запуске
         self.search_recipes()
 
     def search_recipes(self):
@@ -139,7 +138,7 @@ class KitchenApp(QMainWindow):
         if not self.all_recipes:
             return
         self.current_dish = random.choice(self.all_recipes)
-        # Очищаем список и показываем только случайное блюдо
+        #случайное блюдо
         self.recipes_list.clear()
         self.found_recipes = [self.current_dish]
         self.recipes_list.addItem(self.current_dish["name"])
@@ -177,7 +176,7 @@ class KitchenApp(QMainWindow):
         
         self.content_field.setText(text)
 
-        # Обновляем состояние кнопки избранного
+        #обновления состояние кнопки избранного
         if self.current_dish["name"] in self.favorites:
             self.btn_add_fav.setText("✅ В избранном")
             self.btn_add_fav.setEnabled(False)
